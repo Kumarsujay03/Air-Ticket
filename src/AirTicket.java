@@ -60,10 +60,8 @@ public class AirTicket {
 
 
             switch (choice) {
-                case 1:
-
+                case 1 -> {
                     String pNR = sdf.format(new Date());
-
                     System.out.println("For Date of Journey ");
                     System.out.print("Enter year : ");
                     String y = s.nextLine();
@@ -72,7 +70,6 @@ public class AirTicket {
                     System.out.print("Enter day : ");
                     String d = s.nextLine();
                     String date = d + "/" + m + "/" + y;
-
                     System.out.println("""
                             1.\tNew Delhi           \t2.\tAmritsar         \t3.\tNagpur
                             4.\tMumbai              \t5.\tAhmedabad        \t6.\tChandigarh
@@ -274,20 +271,15 @@ public class AirTicket {
                             DST = "Ranchi";
                             break;
                     }
-
                     System.out.print("Enter number of Person : ");
                     int n = in.nextInt();
-
                     System.out.print("Enter " + n + " Person Name : ");
                     String pName = s.nextLine();
-
                     String tempPNR = pNR;
                     al.add(new Ticket(pNR, pName, date, SRC, DST));
-
                     oos = new ObjectOutputStream(new FileOutputStream(file));
                     oos.writeObject(al);
                     oos.close();
-
                     System.out.println("\n");
                     System.out.println("------------------------------------------");
                     System.out.println("Ticket Confirmed.");
@@ -298,21 +290,21 @@ public class AirTicket {
                     System.out.println("Destination : " + DST);
                     System.out.println("------------------------------------------");
                     System.out.println("\n");
-                    break;
-                case 2:
+                }
+                case 2 -> {
                     if (file.isFile()) {
                         ois = new ObjectInputStream(new FileInputStream(file));
                         al = (ArrayList<Ticket>) ois.readObject();
                         ois.close();
 
                         boolean found = false;
-                        System.out.println("Enter empno to  search : ");
-                        String empno = s.nextLine();
+                        System.out.print("Enter PNR to Check : ");
+                        String pnr = s.nextLine();
                         System.out.println("------------------------------------------");
                         li = al.listIterator();
                         while (li.hasNext()) {
                             Ticket e = (Ticket) li.next();
-                            int tempstr = stringCompare(e.pnr, empno);
+                            int tempstr = stringCompare(e.pnr, pnr);
                             if (tempstr == 0) {
                                 System.out.println(e);
                                 found = true;
@@ -325,18 +317,41 @@ public class AirTicket {
                     } else {
                         System.out.println("Data not found.......!");
                     }
-                    break;
-                case 3:
+                }
+                case 3 -> System.out.println("Coming soon....!");
+                case 4 -> {
+                    if (file.isFile()) {
+                        ois = new ObjectInputStream(new FileInputStream(file));
+                        al = (ArrayList<Ticket>) ois.readObject();
+                        ois.close();
 
-                    System.out.println("Coming soon....!");
-                    break;
-                case 4:
-                    System.out.println("Coming soon....!");
-                    break;
-                case 5:
-                    System.out.println("Coming soon....!");
-                    break;
-                case 9:
+                        boolean found = false;
+                        System.out.println("Enter PNR to Cancel : ");
+                        String pnr = s.nextLine();
+                        System.out.println("------------------------------------------");
+                        li = al.listIterator();
+                        while (li.hasNext()) {
+                            Ticket e = (Ticket) li.next();
+                            int tempstr = stringCompare(e.pnr, pnr);
+                            if (tempstr == 0) {
+                                li.remove();
+                                found = true;
+                            }
+                        }
+                        if (found) {
+                            oos = new ObjectOutputStream(new FileOutputStream(file));
+                            oos.writeObject(al);
+                            oos.close();
+                            System.out.println("PNR Cancelled successfully.......!");
+                        } else {
+                            System.out.println("Record not found....!");
+                        }
+                        System.out.println("------------------------------------------");
+                    } else {
+                        System.out.println("File is nit found.....!");
+                    }
+                }
+                case 9 -> {
                     if (file.isFile()) {
                         ois = new ObjectInputStream(new FileInputStream(file));
                         al = (ArrayList<Ticket>) ois.readObject();
@@ -350,6 +365,7 @@ public class AirTicket {
                     } else {
                         System.out.println("File is nit found.....!");
                     }
+                }
             }
         } while (choice != 0);
 
@@ -357,24 +373,19 @@ public class AirTicket {
 
     public static int stringCompare(String str1, String str2)
     {
-
         int l1 = str1.length();
         int l2 = str2.length();
         int lmin = Math.min(l1, l2);
-
         for (int i = 0; i < lmin; i++) {
             int str1_ch = (int)str1.charAt(i);
             int str2_ch = (int)str2.charAt(i);
-
             if (str1_ch != str2_ch) {
                 return str1_ch - str2_ch;
             }
         }
-
         if (l1 != l2) {
             return l1 - l2;
         }
-
         // If none of the above conditions is true,
         // it implies both the strings are equal
         else {
